@@ -15,25 +15,37 @@ pipeline {
                 }
             }
             steps {
-                echo "Building the application"
+                echo "Building the application $BRANCH_NAME"
             }
         }
 
-        stage('deploy') {
+        stage('deploy to prod') {
             when {
                 expression {
                     BRANCH_NAME == 'main'
                 }
             }
             steps {
-                echo "Deploying the application"
+                echo "Deploying the application $$BRANCH_NAME"
                 script {
-                    def dockerCmd = ''
+                    def dockerCmd = 'docker run -p 3080:3080 -d tishadev/react-app'
                     sshagent(['ec2-server-key']) {
-                        sh 'ssh -o StrictHostKeyChecking=no ec2-user@34.229.74.48'
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@34.229.74.48 ${dockerCmd} " 
 
                     }
                 }
+            }
+        }
+
+        stage('deploy to dev') {
+            when {
+                expression {
+                    BRANCH_NAME == 'dev'
+                }
+            }
+            steps {
+                echo "Deploying the application $$BRANCH_NAME"
+                
             }
         }
     } 
