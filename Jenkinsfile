@@ -26,7 +26,7 @@ pipeline {
                 }
             }
             steps {
-                echo "Deploying the application $$BRANCH_NAME"
+                echo "Deploying the application $BRANCH_NAME"
                 script {
                     def dockerCmd = 'docker run -p 3080:3080 -d tishadev/react-app'
                     sshagent(['ec2-server-key']) {
@@ -44,7 +44,7 @@ pipeline {
                 }
             }
             steps {
-                echo "Deploying the application $$BRANCH_NAME"
+                echo "Deploying the application $BRANCH_NAME"
                 
             }
         }
